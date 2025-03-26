@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    networks:
+      - mynetwork
+
+  redis:
+    image: redis:latest
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
