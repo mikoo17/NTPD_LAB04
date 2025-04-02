@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 import numpy as np
+import os
 from sklearn.linear_model import LinearRegression
 
 # Inicjalizacja aplikacji
@@ -11,7 +12,7 @@ model = LinearRegression()
 X_train = np.array([[1], [2], [3], [4], [5]])
 y_train = np.array([2, 4, 6, 8, 10])
 model.fit(X_train, y_train)
-
+api_key = os.getenv("API_KEY", "")
 # Definicja schematu danych wejściowych
 class InputData(BaseModel):
     value: float
@@ -38,4 +39,7 @@ def model_info():
 # Endpoint sprawdzania statusu serwera
 @app.get("/health")
 def health_check():
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "api_key": api_key if api_key else "Not Set"  # Pokazuje, czy klucz API jest ustawiony
+    }
